@@ -1,0 +1,22 @@
+{
+  "name": "namaste-react",
+  "version": "1.0.0",
+  "description": "react course",
+  "main": "App.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eric840906/namaste-react.git"
+  },
+  "author": "Eric Chiu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eric840906/namaste-react/issues"
+  },
+  "homepage": "https://github.com/eric840906/namaste-react#readme",
+  "devDependencies": {
+    "parcel": "^2.8.2"
+  }
+}

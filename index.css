@@ -1,0 +1,35 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+.nav-items ul{
+  list-style: none;
+  display: flex;
+  gap: 5px;
+}
+
+.nav-items li{
+  padding: 5px;
+}
+
+.restaurant-card {
+  width: 200px;
+  flex: 1 1 30%;
+  padding: 10px;
+  min-height: 300px;
+}
+
+.restaurant-image {
+  width: 100%;
+  object-fit: cover;
+  height: 150px;
+}
+
+@media (max-width:768px) {
+  .restaurant-card {
+  width: 200px;
+  flex: 1 1 50%;
+}
+}

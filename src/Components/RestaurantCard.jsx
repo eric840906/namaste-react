@@ -1,10 +1,11 @@
+import { IMG_CDN_URL } from "../constants"
 export const RestaurantCard = ({ restaurantObject }) => {
   return (
-    <div className='restaurant-card' key={restaurantObject.id}>
-      <img className='restaurant-image' src={restaurantObject.image} />
-      <h4>{restaurantObject.name}</h4>
-      <span>{restaurantObject.tag.join(', ')}</span>
-      <div>{restaurantObject.rating}stars</div>
+    <div className='restaurant-card' key={restaurantObject.data.id}>
+      <img className='restaurant-image' src={`${IMG_CDN_URL}${restaurantObject.data.cloudinaryImageId}`} />
+      <h4>{restaurantObject.data.name}</h4>
+      <span>{restaurantObject.data.tags.join(', ')}</span>
+      <div>{restaurantObject.data.avgRating}stars</div>
     </div>
   )
 }

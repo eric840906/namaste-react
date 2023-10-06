@@ -5,7 +5,7 @@ on:
     issue_comment:
         types: [created]
     pull_request:
-        types: [opened ,edited]
+        types: [opened ,synchronize]
 # Permissions needed for reacting and adding comments for IssueOps commands
 permissions:
     pull-requests: write

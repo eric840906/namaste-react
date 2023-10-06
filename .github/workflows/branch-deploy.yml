@@ -30,11 +30,10 @@ jobs:
             - name: Check Changed Files
               id: changed-files
               run: |
-                compare_url="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/files"
-                files_changed=$(curl -s -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "$compare_url" | jq -r '.[].filename')
+                pr_number=${{ github.event.number }}
+                repo=${{${{ github.repository }}}}
+                owner=${{github.repository_owner}}
 
-                if [ -z "$files_changed" ]; then
-                    echo "No files changed in the pull request."
-                    exit 0  # Exit successfully, as there are no changes to process.
-                fi
-                echo "$files_changed"
+                echo "$pr_number"
+                echo "$repo"
+                echo "$owner"

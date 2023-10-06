@@ -28,6 +28,6 @@ jobs:
               id: changed-files
               run: |
                   files_changed=$(curl -s -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                  "https://api.github.com/repos/${{github.repository_owner}}/${{ github.repository }}/pulls/${{ github.sha }}/files"\
+                  "https://api.github.com/repos/${{github.repository_owner}}/${{ github.repository }}/pulls/${{ github.event.number }}/files"\
                   | jq '.files[].filename' -r)
                   echo "$files_changed"

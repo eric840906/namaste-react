@@ -24,6 +24,9 @@ jobs:
                   trigger: '.deploy'
                   noop_trigger: '.noop'
 
+            - name: Checkout code
+              uses: actions/checkout@v3
+
             - name: Check Changed Files
               id: changed-files
               run: |

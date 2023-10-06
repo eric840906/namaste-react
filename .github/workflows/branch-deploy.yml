@@ -38,4 +38,4 @@ jobs:
                 workflow_sha=${{github.workflow_sha}}
                 event_name=${{github.event_name}}
 
-                echo "files_changed"
+                echo "$files_changed"

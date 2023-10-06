@@ -35,8 +35,3 @@ jobs:
 
 
                 echo "$files_changed"
-    command:
-        name: Build
-        needs: [compare]
-        if: ${{ github.event.issue.pull_request }}
-        runs-on: ubuntu-latest

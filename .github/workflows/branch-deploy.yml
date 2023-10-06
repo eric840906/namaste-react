@@ -27,6 +27,8 @@ jobs:
             - name: Check Changed Files
               id: changed-files
               run: |
+                compare_url="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}/files"
+                files_changed=$(curl -s -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "$compare_url" | jq -r '.[].filename')
                 pr_number=${{ github.event.issue.number }}
                 repo=${{ github.repository }}
                 owner=${{github.repository_owner}}
@@ -36,6 +38,4 @@ jobs:
                 workflow_sha=${{github.workflow_sha}}
                 event_name=${{github.event_name}}
 
-                echo "$pr_number"
-                echo "$repo"
-                echo "$owner"
+                echo "files_changed"

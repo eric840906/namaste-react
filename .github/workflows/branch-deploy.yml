@@ -31,7 +31,7 @@ jobs:
               id: changed-files
               run: |
                 pr_number=${{ github.event.number }}
-                repo=${{${{ github.repository }}}}
+                repo=${{ github.repository }}
                 owner=${{github.repository_owner}}
 
                 echo "$pr_number"

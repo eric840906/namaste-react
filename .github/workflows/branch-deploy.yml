@@ -37,6 +37,7 @@ jobs:
                 head_sha=${{github.head_ref}}
                 github_sha=${{github.sha}}
                 workflow_sha=${{github.workflow_sha}}
+                event_name=${{github.event_name}}
 
                 echo "$pr_number"
                 echo "$repo"

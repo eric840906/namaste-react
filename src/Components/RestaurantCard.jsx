@@ -5,7 +5,7 @@ export const RestaurantCard = ({ restaurantObject }) => {
       <img className='restaurant-image' src={`${IMG_CDN_URL}${restaurantObject.data.cloudinaryImageId}`} />
       <h4>{restaurantObject.data.name}</h4>
       <span>{restaurantObject.data.tags.join(', ')}</span>
-      <div>{restaurantObject.data.avgRating}stars</div>
+      {/* <div>{restaurantObject.data.avgRating}stars</div> */}
     </div>
   )
 }

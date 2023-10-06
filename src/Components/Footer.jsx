@@ -1,5 +1,5 @@
 export const Footer = () => (
   <>
-    {/* <h2>Footer</h2> */}
+    <h2>Footer</h2>
   </>
 )

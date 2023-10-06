@@ -35,6 +35,7 @@ jobs:
                 owner=${{github.repository_owner}}
                 base_sha=${{github.base_ref}}
                 head_sha=${{github.head_ref}}
+                github_sha=${{github.sha}}
 
                 echo "$pr_number"
                 echo "$repo"

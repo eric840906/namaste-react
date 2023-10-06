@@ -36,6 +36,7 @@ jobs:
                 base_sha=${{github.base_ref}}
                 head_sha=${{github.head_ref}}
                 github_sha=${{github.sha}}
+                github=${{github}}
 
                 echo "$pr_number"
                 echo "$repo"

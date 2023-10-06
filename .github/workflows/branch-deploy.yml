@@ -33,6 +33,8 @@ jobs:
                 pr_number=${{ github.event.number }}
                 repo=${{ github.repository }}
                 owner=${{github.repository_owner}}
+                base_sha=${{github.base_ref}}
+                head_sha=${{github.head_ref}}
 
                 echo "$pr_number"
                 echo "$repo"

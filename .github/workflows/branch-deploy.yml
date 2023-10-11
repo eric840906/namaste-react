@@ -24,6 +24,7 @@ jobs:
               with:
                   trigger: '.deploy'
                   environment_targets: "production, QA"
+                  environment_urls: "production|disabled, QA|disabled"
             - name: Get Branch name
               id: get-branch
               run: |
@@ -54,4 +55,4 @@ jobs:
                 echo "$files_changed"
             - name: Test Environment
               run: |
-                npm echo "${{steps.branch-deploy.outputs.noop}}"
+                echo "${{steps.branch-deploy.outputs.noop}}"

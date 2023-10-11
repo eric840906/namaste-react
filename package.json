@@ -6,7 +6,7 @@
   "scripts": {
     "start": "parcel index.html",
     "test": "jest",
-    "test123": "parcel"
+    "test1": "parcel"
   },
   "repository": {
     "type": "git",

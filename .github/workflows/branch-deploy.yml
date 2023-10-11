@@ -27,7 +27,8 @@ jobs:
               run: |
                 pr_info=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}")
                 branch_name=$(echo "$pr_info" | jq -r '.head.ref')
-                echo "branch_name=$branch_name" >> "$GITHUB_ENV"
+                echo "$branch_name"
+
 
             - name: Checkout code
               uses: actions/checkout@v3

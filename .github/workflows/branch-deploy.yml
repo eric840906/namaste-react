@@ -23,6 +23,11 @@ jobs:
               with:
                   trigger: '.deploy'
                   noop_trigger: '.noop'
+            - name: Get Branch name
+              run: |
+                pr_info=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}")
+                branch_name=$(echo "$pr_info" | jq -r '.head.ref')
+                echo "branch_name=$branch_name" >> "$GITHUB_ENV"
 
             - name: Checkout code
               uses: actions/checkout@v3

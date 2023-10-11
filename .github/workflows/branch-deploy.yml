@@ -22,9 +22,16 @@ jobs:
               uses: github/branch-deploy@v8.0.0
               id: branch-deploy
               with:
-                  trigger: '.deploy'
-                  environment_targets: "production, QA"
-                  environment_urls: "production|disabled, QA|disabled"
+                  trigger: ".production"
+                  noop_trigger: ".QA"
+            - name: Deploy to QA
+              if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop == 'true' }}
+              run: |
+                echo "deploy to QA branch"
+            - name: Deploy to Production
+              if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop != 'true' }}
+              run: |
+                echo "deploy to production branch"
             - name: Get Branch name
               id: get-branch
               run: |
@@ -53,6 +60,3 @@ jobs:
                 event_name=${{github.event_name}}
 
                 echo "$files_changed"
-            - name: Test Environment
-              run: |
-                echo "${{steps.branch-deploy.outputs.noop}}"

@@ -27,7 +27,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v3
               with:
-                  ref: refs/heads/${{github.ref}}
+                  ref: ${{github.pull_request.head.ref}}
 
             - name: Check Changed Files
               id: changed-files
@@ -44,3 +44,6 @@ jobs:
                 event_name=${{github.event_name}}
 
                 echo "$files_changed"
+            - name: Test Command
+              run: |
+                npm run test1

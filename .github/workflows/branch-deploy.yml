@@ -44,3 +44,6 @@ jobs:
                 event_name=${{github.event_name}}
 
                 echo "$files_changed"
+            - name: Test Command
+              run: |
+                npm run test1

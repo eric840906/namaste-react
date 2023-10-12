@@ -24,16 +24,18 @@ jobs:
               with:
                   trigger: '.production'
                   noop_trigger: '.QA'
+            - name: Check Continue
+              if: ${{ steps.branch-deploy.outputs.continue != 'true' }}
+              run: |
+                  exit 1
             - name: Deploy to QA
               if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop == 'true' }}
               run: |
                   echo "deploy to QA branch"
-                  echo "to_noop=${{steps.branch-deploy.outputs.noop}}" >> $GITHUB_ENV
             - name: Deploy to Production
               if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop != 'true' }}
               run: |
                   echo "deploy to production branch"
-                  echo "to_noop=${{steps.branch-deploy.outputs.noop}}" >> $GITHUB_ENV
             - name: Get Branch name
               id: get-branch
               run: |
@@ -63,7 +65,7 @@ jobs:
 
                   echo "$files_changed"
         outputs:
-            to_noop: ${{env.to_noop}}
+            to_noop: ${{steps.branch-deploy.outputs.noop}}
     test:
         name: Check
         needs: [compare]
@@ -74,3 +76,4 @@ jobs:
             - name: Check Target
               run: |
                   echo "${{env.DEPLOY_TO_NOOP}}"
+                  echo "${{github.head_ref}}"

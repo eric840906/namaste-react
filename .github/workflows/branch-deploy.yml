@@ -71,6 +71,6 @@ jobs:
         env:
             DEPLOY_TO_NOOP: ${{needs.compare.outputs.to_noop}}
         steps:
-            -name: Check Target
-             run: |
-                 echo "${{env.DEPLOY_TO_NOOP}}"
+            - name: Check Target
+              run: |
+                  echo "${{env.DEPLOY_TO_NOOP}}"

@@ -34,6 +34,9 @@ jobs:
               run: |
                   echo "deploy to production branch"
                   echo "to_noop=${{steps.branch-deploy.outputs.noop}}" >> $GITHUB_ENV
+            - name: Check Continue
+              run: |
+                  echo "${{steps.branch-deploy.outputs.continue}}"
             - name: Get Branch name
               id: get-branch
               run: |

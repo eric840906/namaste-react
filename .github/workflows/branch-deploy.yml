@@ -22,25 +22,25 @@ jobs:
               uses: github/branch-deploy@v8.0.0
               id: branch-deploy
               with:
-                  trigger: ".production"
-                  noop_trigger: ".QA"
+                  trigger: '.production'
+                  noop_trigger: '.QA'
             - name: Deploy to QA
               if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop == 'true' }}
               run: |
-                echo "deploy to QA branch"
-                echo "to_noop=${{steps.branch-deploy.outputs.noop}}" >> $GITHUB_ENV
+                  echo "deploy to QA branch"
+                  echo "to_noop=${{steps.branch-deploy.outputs.noop}}" >> $GITHUB_ENV
             - name: Deploy to Production
               if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop != 'true' }}
               run: |
-                echo "deploy to production branch"
-                echo "to_noop=${{steps.branch-deploy.outputs.noop}}" >> $GITHUB_ENV
+                  echo "deploy to production branch"
+                  echo "to_noop=${{steps.branch-deploy.outputs.noop}}" >> $GITHUB_ENV
             - name: Get Branch name
               id: get-branch
               run: |
-                pr_info=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}")
-                branch_sha=$(echo "$pr_info" | jq -r '.head.sha')
-                echo "$branch_sha"
-                echo "CURRENT_SHA=$branch_sha" >> $GITHUB_ENV
+                  pr_info=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}")
+                  branch_sha=$(echo "$pr_info" | jq -r '.head.sha')
+                  echo "$branch_sha"
+                  echo "CURRENT_SHA=$branch_sha" >> $GITHUB_ENV
 
             - name: Checkout code
               uses: actions/checkout@v3
@@ -50,15 +50,26 @@ jobs:
             - name: Check Changed Files
               id: changed-files
               run: |
-                compare_url="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}/files"
-                files_changed=$(curl -s -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "$compare_url" | jq -r '.[].filename')
-                pr_number=${{ github.event.issue.number }}
-                repo=${{ github.repository }}
-                owner=${{github.repository_owner}}
-                base_sha=${{github.base_ref}}
-                head_sha=${{github.head_ref}}
-                github_sha=${{github.sha}}
-                workflow_sha=${{github.workflow_sha}}
-                event_name=${{github.event_name}}
+                  compare_url="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}/files"
+                  files_changed=$(curl -s -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "$compare_url" | jq -r '.[].filename')
+                  pr_number=${{ github.event.issue.number }}
+                  repo=${{ github.repository }}
+                  owner=${{github.repository_owner}}
+                  base_sha=${{github.base_ref}}
+                  head_sha=${{github.head_ref}}
+                  github_sha=${{github.sha}}
+                  workflow_sha=${{github.workflow_sha}}
+                  event_name=${{github.event_name}}
 
-                echo "$files_changed"
+                  echo "$files_changed"
+        outputs:
+            to_noop: ${{env.to_noop}}
+    test:
+        name: Check
+        needs: [compare]
+        env:
+            DEPLOY_TO_NOOP: ${{needs.compare.outputs.to_noop}}
+        steps:
+            -name: Check Target
+             run: |
+                 echo "${{env.DEPLOY_TO_NOOP}}"

@@ -76,3 +76,4 @@ jobs:
             - name: Check Target
               run: |
                   echo "${{env.DEPLOY_TO_NOOP}}"
+                  echo "${{github.head_ref}}"

@@ -28,10 +28,12 @@ jobs:
               if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop == 'true' }}
               run: |
                 echo "deploy to QA branch"
+                echo "to_noop=${{steps.branch-deploy.outputs.noop}}" >> $GITHUB_ENV
             - name: Deploy to Production
               if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop != 'true' }}
               run: |
                 echo "deploy to production branch"
+                echo "to_noop=${{steps.branch-deploy.outputs.noop}}" >> $GITHUB_ENV
             - name: Get Branch name
               id: get-branch
               run: |

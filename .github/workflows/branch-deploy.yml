@@ -67,6 +67,7 @@ jobs:
     test:
         name: Check
         needs: [compare]
+        runs-on: ubuntu-latest
         env:
             DEPLOY_TO_NOOP: ${{needs.compare.outputs.to_noop}}
         steps:

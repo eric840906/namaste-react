@@ -58,7 +58,7 @@ jobs:
             - name: Check Changed Files
               id: changed-files
               run: |
-                  if[${{github.event_name}} == 'pull_request']
+                  if[ "${{github.event_name}}" == 'pull_request']
                   then
                     pr_number = ${{ github.event.number }}
                   el

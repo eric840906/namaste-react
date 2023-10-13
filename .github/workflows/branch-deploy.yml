@@ -2,6 +2,9 @@ name: 'branch deploy demo'
 
 # The workflow to execute on is comments that are newly created
 on:
+    push:
+        branches:
+            - master
     issue_comment:
         types: [created]
 
@@ -15,7 +18,6 @@ permissions:
 jobs:
     compare:
         name: Compare Files
-        if: ${{ github.event.issue.pull_request }}
         runs-on: ubuntu-latest
         steps:
             - name: branch-deploy
@@ -75,5 +77,6 @@ jobs:
         steps:
             - name: Check Target
               run: |
-                  echo "${{env.DEPLOY_TO_NOOP}}"
-                  echo "${{github.event.issue.title}} #${{github.event.issue.number}}"
+                  echo "noop: ${{env.DEPLOY_TO_NOOP}}"
+                  echo "title: ${{github.event.issue.title}}"
+                  echo "event: ${{github.event.event_name}}"

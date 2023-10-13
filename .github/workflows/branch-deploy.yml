@@ -83,4 +83,4 @@ jobs:
             - name: Check Target
               run: |
                   echo "${{env.DEPLOY_TO_NOOP}}"
-                  echo "${{github.event.issue.title}} #${{github.event_name}}"
+                  echo "${{github.event.issue.title}} #${{github.event.pull_request.merged}}"

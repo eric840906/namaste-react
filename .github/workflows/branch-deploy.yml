@@ -45,8 +45,12 @@ jobs:
                   pr_info=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}")
                   branch_sha=$(echo "$pr_info" | jq -r '.head.sha')
                   echo "$branch_sha"
-                  echo "CURRENT_SHA=$branch_sha" >> $GITHUB_ENV
-
+                  if [$branch_sha == 'null']
+                  then
+                    echo "CURRENT_SHA=${{github.sha}}" >> $GITHUB_ENV
+                  el
+                    echo "CURRENT_SHA=$branch_sha" >> $GITHUB_ENV
+                  fi
             - name: Checkout code
               uses: actions/checkout@v3
               with:

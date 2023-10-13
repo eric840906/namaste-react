@@ -28,7 +28,7 @@ jobs:
                   trigger: '.production'
                   noop_trigger: '.QA'
             - name: Check Continue
-              if: ${{ steps.branch-deploy.outputs.continue != 'true'  && github.event_name == issue_comment}}
+              if: ${{ steps.branch-deploy.outputs.continue != 'true'  && github.event_name == 'issue_comment'}}
               run: |
                   exit 1
             - name: Deploy to QA

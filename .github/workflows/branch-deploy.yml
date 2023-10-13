@@ -61,7 +61,7 @@ jobs:
                   if[ "${{github.event_name}}" == 'pull_request']
                   then
                     pr_number = "${{ github.event.number }}"
-                  el
+                  else
                     pr_number = "${{ github.event.issue.number }}"
                   fi
 

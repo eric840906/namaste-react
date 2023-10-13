@@ -2,9 +2,8 @@ name: 'branch deploy demo'
 
 # The workflow to execute on is comments that are newly created
 on:
-    push:
-        branches:
-            - master
+    pull_request:
+        types: [closed]
     issue_comment:
         types: [created]
 
@@ -59,9 +58,15 @@ jobs:
             - name: Check Changed Files
               id: changed-files
               run: |
-                  compare_url="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}/files"
+                  if[${{github.event_name}} == 'pull_request']
+                  then
+                    pr_number = ${{ github.event.number }}
+                  el
+                    pr_number = ${{ github.event.issue.number }}
+                  fi
+
+                  compare_url="https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number/files"
                   files_changed=$(curl -s -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "$compare_url" | jq -r '.[].filename')
-                  pr_number=${{ github.event.issue.number }}
                   repo=${{ github.repository }}
                   owner=${{github.repository_owner}}
                   base_sha=${{github.base_ref}}
@@ -69,6 +74,7 @@ jobs:
                   github_sha=${{github.sha}}
                   workflow_sha=${{github.workflow_sha}}
                   event_name=${{github.event_name}}
+
 
                   echo "$files_changed"
         outputs:

@@ -21,6 +21,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: branch-deploy
+              if: ${{ github.event.issue.pull_request }}
               uses: github/branch-deploy@v8.0.0
               id: branch-deploy
               with:
@@ -77,6 +78,5 @@ jobs:
         steps:
             - name: Check Target
               run: |
-                  echo "noop: ${{env.DEPLOY_TO_NOOP}}"
-                  echo "title: ${{github.event.issue.title}}"
-                  echo "event: ${{github.event.event_name}}"
+                  echo "${{env.DEPLOY_TO_NOOP}}"
+                  echo "${{github.event.issue.title}} #${{github.event.issue.number}}"

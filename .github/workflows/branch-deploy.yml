@@ -76,4 +76,4 @@ jobs:
             - name: Check Target
               run: |
                   echo "${{env.DEPLOY_TO_NOOP}}"
-                  echo "${{github.ref_name}}"
+                  echo "${{github.event.issue.title}}"

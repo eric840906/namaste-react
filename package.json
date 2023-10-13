@@ -5,7 +5,8 @@
   "main": "App.js",
   "scripts": {
     "start": "parcel index.html",
-    "test": "jest"
+    "test": "jest",
+    "test1": "echo '123'"
   },
   "repository": {
     "type": "git",

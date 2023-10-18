@@ -19,8 +19,13 @@ jobs:
         name: Compare Files
         runs-on: ubuntu-latest
         steps:
+            - name: Check Merged
+              if: ${{ github.event.pull_request.merged }}
+              id: check-merge
+              run: |
+                echo The PR was merged
             - name: branch-deploy
-              if: ${{ github.event.issue.pull_request }}
+              if: ${{ github.event.issue.pull_request && !github.event.pull_request.merged }}
               uses: github/branch-deploy@v8.0.0
               id: branch-deploy
               with:
@@ -54,7 +59,7 @@ jobs:
               uses: actions/checkout@v3
               with:
                   ref: ${{env.CURRENT_SHA}}
-            - name: Get Event Name
+            - name: Get Event Number
               run: |
                   if [ "${{github.event_name}}" == 'pull_request' ]
                   then

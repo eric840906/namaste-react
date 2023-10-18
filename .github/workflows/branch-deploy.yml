@@ -19,11 +19,6 @@ jobs:
         name: Compare Files
         runs-on: ubuntu-latest
         steps:
-            - name: Check Merged
-              if: ${{ github.event.pull_request.merged }}
-              id: check-merge
-              run: |
-                echo The PR was merged
             - name: branch-deploy
               if: ${{ github.event.issue.pull_request && !github.event.pull_request.merged }}
               uses: github/branch-deploy@v8.0.0
@@ -40,7 +35,7 @@ jobs:
               run: |
                   echo "deploy to QA branch"
             - name: Deploy to Production
-              if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop != 'true' }}
+              if: ${{ github.event.pull_request.merged }}
               run: |
                   echo "deploy to production branch"
             - name: Get Branch name

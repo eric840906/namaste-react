@@ -2,91 +2,86 @@ name: 'branch deploy demo'
 
 # The workflow to execute on is comments that are newly created
 on:
-  pull_request:
-    types: [closed]
-  issue_comment:
-    types: [created]
+    pull_request:
+        types: [closed]
+    issue_comment:
+        types: [created]
 
 # Permissions needed for reacting and adding comments for IssueOps commands
 permissions:
-  pull-requests: write
-  deployments: write
-  contents: write
-  checks: read
+    pull-requests: write
+    deployments: write
+    contents: write
+    checks: read
 
 jobs:
-  compare:
-    name: Compare Files
-    runs-on: ubuntu-latest
-    steps:
-      - name: branch-deploy
-        if: ${{ github.event.issue.pull_request && !github.event.pull_request.merged }}
-        uses: github/branch-deploy@v8.0.0
-        id: branch-deploy
-        with:
-          trigger: '.production'
-          noop_trigger: '.QA'
-      - name: Check Continue
-        if: ${{ steps.branch-deploy.outputs.continue != 'true'  && github.event_name == 'issue_comment'}}
-        run: |
-          exit 1
-      - name: Deploy to QA
-        if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop == 'true' }}
-        run: |
-          echo "deploy to QA branch"
-      - name: Deploy to Production
-        if: ${{ github.event.pull_request.merged }}
-        run: |
-          echo "deploy to production branch"
-      - name: Get Branch name
-        id: get-branch
-        run: |
-          pr_info=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number || github.event.number }}")
-          branch_sha=$(echo "$pr_info" | jq -r '.head.sha')
-          echo "$branch_sha"
-          if [$branch_sha == 'null']
-          then
-            echo "CURRENT_SHA=${{github.sha}}" >> $GITHUB_ENV
-          el
-            echo "CURRENT_SHA=$branch_sha" >> $GITHUB_ENV
-          fi
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          ref: ${{env.CURRENT_SHA}}
-      - name: Get Event Number
-        run: |
-          if [ "${{github.event_name}}" == 'pull_request' ]
-          then
-            echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
-          else
-            echo "PR_NUMBER=${{ github.event.issue.number }}" >> $GITHUB_ENV
-          fi
-      - name: Check Changed Files
-        id: changed-files
-        run: |
-          compare_url="https://api.github.com/repos/${{ github.repository }}/pulls/${{env.PR_NUMBER}}/files"
-          files_changed=$(curl -s -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "$compare_url" | jq -r '.[].filename')
-          repo=${{ github.repository }}
-          owner=${{github.repository_owner}}
-          base_sha=${{github.base_ref}}
-          head_sha=${{github.head_ref}}
-          github_sha=${{github.sha}}
-          workflow_sha=${{github.workflow_sha}}
-          event_name=${{github.event_name}}
+    compare:
+        name: Compare Files
+        runs-on: ubuntu-latest
+        steps:
+            - name: branch-deploy
+              if: ${{ github.event.issue.pull_request && !github.event.pull_request.merged }}
+              uses: github/branch-deploy@v8.0.0
+              id: branch-deploy
+              with:
+                  trigger: '.production'
+                  noop_trigger: '.QA'
+            - name: Check Continue
+              if: ${{ steps.branch-deploy.outputs.continue != 'true'  && github.event_name == 'issue_comment'}}
+              run: |
+                  exit 1
+            - name: Deploy to QA
+              if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop == 'true' }}
+              run: |
+                  echo "deploy to QA branch"
+            - name: Deploy to Production
+              if: ${{ github.event.pull_request.merged }}
+              run: |
+                  echo "deploy to production branch"
+            - name: Get Branch name
+              id: get-branch
+              run: |
+                  pr_info=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number || github.event.number }}")
+                  branch_sha=$(echo "$pr_info" | jq -r '.head.sha')
+                  echo "$branch_sha"
+                  if [$branch_sha == 'null']
+                  then
+                    echo "CURRENT_SHA=${{github.sha}}" >> $GITHUB_ENV
+                  el
+                    echo "CURRENT_SHA=$branch_sha" >> $GITHUB_ENV
+                  fi
+            - name: Checkout code
+              uses: actions/checkout@v3
+              with:
+                  ref: ${{env.CURRENT_SHA}}
+            - name: Get Event Number
+              run: |
+                  echo "PR_NUMBER=${{ github.event.number || github.event.issue.number }}" >> $GITHUB_ENV
+            - name: Check Changed Files
+              id: changed-files
+              run: |
+                  compare_url="https://api.github.com/repos/${{ github.repository }}/pulls/${{env.PR_NUMBER}}/files"
+                  files_changed=$(curl -s -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "$compare_url" | jq -r '.[].filename')
+                  repo=${{ github.repository }}
+                  owner=${{github.repository_owner}}
+                  base_sha=${{github.base_ref}}
+                  head_sha=${{github.head_ref}}
+                  github_sha=${{github.sha}}
+                  workflow_sha=${{github.workflow_sha}}
+                  event_name=${{github.event_name}}
 
 
-          echo "$files_changed"
-    outputs:
-      to_noop: ${{steps.branch-deploy.outputs.noop}}
-  test:
-    name: Check
-    needs: [compare]
-    runs-on: ubuntu-latest
-    env:
-      DEPLOY_TO_NOOP: ${{needs.compare.outputs.to_noop}}
-    steps:
-      - name: Check Target
-        run: |
-          echo "${{env.DEPLOY_TO_NOOP}}"
-          echo "${{github.event.issue.title || github.event.pull_request.title}} #${{github.event.pull_request.merged}}"
+                  echo "$files_changed"
+        outputs:
+            to_noop: ${{steps.branch-deploy.outputs.noop}}
+    test:
+        name: Check
+        needs: [compare]
+        runs-on: ubuntu-latest
+        env:
+            DEPLOY_TO_NOOP: ${{needs.compare.outputs.to_noop}}
+        steps:
+            - name: Check Target
+              run: |
+                  echo "${{env.DEPLOY_TO_NOOP}}"
+                  echo "${{github.event.issue.title || github.event.pull_request.title}} #${{github.event.pull_request.merged}}"

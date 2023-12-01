@@ -9,10 +9,10 @@ export const Body = () => {
   const filterTopRating = () => {
     setRestaurants(() => restaurantList.filter(restaurant => restaurant.data.avgRating > 4))
   }
-  useEffect(() => {
-    const filteredRestaurants = restaurantList.filter(item => item.data.name.toLowerCase().includes(search.toLowerCase()))
-    setRestaurants(filteredRestaurants)
-  }, [search])
+  // useEffect(() => {
+  //   const filteredRestaurants = restaurantList.filter(item => item.data.name.toLowerCase().includes(search.toLowerCase()))
+  //   setRestaurants(filteredRestaurants)
+  // }, [search])
   return (
     <>
       <div className="search-container">

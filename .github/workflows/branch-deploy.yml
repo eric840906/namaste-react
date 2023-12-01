@@ -7,13 +7,6 @@ on:
     issue_comment:
         types: [created]
 
-# Permissions needed for reacting and adding comments for IssueOps commands
-permissions:
-    pull-requests: write
-    deployments: write
-    contents: write
-    checks: read
-
 jobs:
     compare:
         runs-on: ubuntu-latest
@@ -22,7 +15,7 @@ jobs:
               run: |
                 comment=${{github.event.comment.body}}
                 if echo "$comment" | grep -q ".QA"; then
-                    echo "$QA=true" >> "$GITHUB_ENV"
+                    echo "$QA=true" >> $GITHUB_ENV
                 fi
             - name: Deploy to Production Branch
               if: ${{github.event.pull_request.merged == true}}

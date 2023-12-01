@@ -23,7 +23,6 @@ jobs:
             - name: Check if comment contains ".QA"
               if: ${{ github.event.comment.body === ".QA"}}
               run: echo "update to QA"
-              continue-on-error: true
             - name: Deploy to Production Branch
               if: ${{github.event.pull_request.merged == true}}
               run: echo "update to production"

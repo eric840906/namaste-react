@@ -15,7 +15,7 @@ permissions:
     checks: read
 
 jobs:
-    build-and-deploy:
+    compare:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -26,8 +26,22 @@ jobs:
               run: |
                 comment=${{github.event.comment.body}}
                 if echo "$comment" | grep -q ".QA"; then
-                    echo "update QA"
+                    echo "$QA=true" >> "$GITHUB_ENV"
                 fi
             - name: Deploy to Production Branch
               if: ${{github.event.pull_request.merged == true}}
               run: echo "update to production"
+        outputs:
+            QA: ${{env.QA}}
+
+    buiid:
+        name: test123
+        runs-on: ubuntu-latest
+        needs: [compare]
+        env:
+            DEPLOY_TO_NOOP: ${{needs.compare.outputs.deploy_to_noop}}
+        steps:
+            - name: check QA
+              if: ${{env.DEPLOY_TO_NOOP == 'true'}}
+              run: echo "QA update"
+

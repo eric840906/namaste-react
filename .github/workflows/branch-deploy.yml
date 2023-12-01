@@ -18,10 +18,6 @@ jobs:
     compare:
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout
-              uses: actions/checkout@v2
-              with:
-                  node-version: ${{ matrix.node-version }}
             - name: Check if comment contains ".QA"
               run: |
                 comment=${{github.event.comment.body}}
@@ -32,14 +28,14 @@ jobs:
               if: ${{github.event.pull_request.merged == true}}
               run: echo "update to production"
         outputs:
-            QA: ${{env.QA}}
+            qa: ${{env.QA}}
 
     buiid:
         name: test123
         runs-on: ubuntu-latest
         needs: [compare]
         env:
-            DEPLOY_TO_NOOP: ${{needs.compare.outputs.deploy_to_noop}}
+            DEPLOY_TO_NOOP: ${{needs.compare.outputs.qa}}
         steps:
             - name: check QA
               if: ${{env.DEPLOY_TO_NOOP == 'true'}}

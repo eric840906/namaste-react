@@ -11,15 +11,14 @@ jobs:
     compare:
         runs-on: ubuntu-latest
         steps:
-            - name: Check if comment contains ".QA"
+            - name: branch-deploy
+              if: ${{ github.event.issue.pull_request && !github.event.pull_request.merged }}
+              id: branch-deploy
               run: |
                 comment=${{github.event.comment.body}}
                 if echo "$comment" | grep -q ".QA"; then
                     echo "QA=true" >> $GITHUB_ENV
                 fi
-            - name: Deploy to Production Branch
-              if: ${{github.event.pull_request.merged == true}}
-              run: echo "update to production"
         outputs:
             qa: ${{env.QA}}
 
@@ -28,9 +27,13 @@ jobs:
         runs-on: ubuntu-latest
         needs: [compare]
         env:
-            DEPLOY_TO_NOOP: ${{needs.compare.outputs.qa}}
+            DEPLOY_TO_QA: ${{needs.compare.outputs.qa}}
         steps:
             - name: check QA
-              if: ${{env.DEPLOY_TO_NOOP == 'true'}}
+              if: ${{env.DEPLOY_TO_QA == 'true'}}
               run: echo "QA update"
+
+            - name: Deploy to Production Branch
+              if: ${{github.event.pull_request.merged == true}}
+              run: echo "update to production"
 

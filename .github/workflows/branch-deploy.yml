@@ -15,7 +15,8 @@ jobs:
               run: |
                 comment=${{github.event.comment.body}}
                 if echo "$comment" | grep -q "QA"; then
-                    echo "$QA=true" >> $GITHUB_ENV
+                    TO_QA=true
+                    echo "$QA=$TO_QA" >> $GITHUB_ENV
                 fi
             - name: Deploy to Production Branch
               if: ${{github.event.pull_request.merged == true}}

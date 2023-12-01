@@ -23,7 +23,7 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
             - name: Check if comment contains ".QA"
-              run: if echo "github.event.comment.body == '.QA'"; then
+              run: if "github.event.comment.body == .QA"; then
                         echo "update QA"
                    fi
             - name: Deploy to Production Branch

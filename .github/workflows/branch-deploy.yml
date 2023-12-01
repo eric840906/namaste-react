@@ -25,7 +25,7 @@ jobs:
             - name: Check if comment contains ".QA"
               run: |
                 comment=${{github.event.comment.body}}
-                if "$comment" | grep -q ".QA"; then
+                if echo "$comment" | grep -q ".QA"; then
                     echo "update QA"
                 fi
             - name: Deploy to Production Branch

@@ -18,12 +18,9 @@ jobs:
                 comment=${{github.event.comment.body}}
                 if echo "$comment" | grep -q ".QA"; then
                     echo "QA=true" >> $GITHUB_ENV
+                el
+                    exit 0
                 fi
-
-            - name: Exit on Error
-              if: ${{ steps.branch-deploy.outputs.continue != 'true'  && github.event_name == 'issue_comment'}}
-              run: |
-                  exit 1
         outputs:
             qa: ${{env.QA}}
 
